@@ -14,7 +14,10 @@
       window.TOPDESK_ASSIGNED_WORK_CONFIG = {
         /*
          * Laat apiBasePath relatief als deze pagina binnen dezelfde TOPdesk-origin
-         * wordt gehost. Gebruik anders bijvoorbeeld:
+         * wordt gehost. Als je deze bestanden extern host, bijvoorbeeld op
+         * https://tjaws.com/topdesk/, dan verwijst /tas/api naar die host.
+         * Gebruik dan alleen een absolute TOPdesk-URL als TOPdesk CORS met
+         * credentials toestaat, of laat apiBasePath naar een eigen proxy wijzen:
          * apiBasePath: "https://mijnorganisatie.topdesk.net/tas/api"
          */
         apiBasePath: "/tas/api",

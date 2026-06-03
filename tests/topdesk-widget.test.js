@@ -71,4 +71,31 @@ assert.equal(
   "/tas/api/operators?query=email%3D%3D%27beheerder%40example.org%27&pageSize=1&dateFormat=iso8601"
 );
 
+const absoluteConfig = widget.deepMerge(widget.DEFAULT_CONFIG, {
+  apiBasePath: "https://voorbeeld.topdesk.net/tas/api"
+});
+
+const absoluteUrl = widget.buildUrl(
+  absoluteConfig,
+  absoluteConfig.sections[0],
+  "/incidents",
+  "operator-id",
+  "operator.id",
+  "params"
+);
+
+assert.equal(
+  absoluteUrl,
+  "https://voorbeeld.topdesk.net/tas/api/incidents?pageSize=10&dateFormat=iso8601&fields=id%2Cnumber%2CbriefDescription%2CprocessingStatus.name%2Coperator.name%2CtargetDate%2CmodificationDate&operator.id=operator-id&completed=false"
+);
+
+const absoluteLookupUrl = widget.buildOperatorLookupUrl(absoluteConfig, {
+  email: "beheerder@example.org"
+});
+
+assert.equal(
+  absoluteLookupUrl,
+  "https://voorbeeld.topdesk.net/tas/api/operators?query=email%3D%3D%27beheerder%40example.org%27&pageSize=1&dateFormat=iso8601"
+);
+
 console.log("Alle TOPdesk-widgettests zijn geslaagd.");

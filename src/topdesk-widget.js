@@ -212,6 +212,14 @@
     return "/" + String(endpoint || "").replace(/^\/+/, "");
   }
 
+  function isAbsoluteHttpUrl(value) {
+    return /^https?:\/\//i.test(String(value || ""));
+  }
+
+  function toRequestUrl(url, config) {
+    return isAbsoluteHttpUrl(config.apiBasePath) ? url.href : url.pathname + url.search;
+  }
+
   function encodeFiqlValue(value) {
     if (typeof value === "boolean") {
       return String(value);
@@ -256,7 +264,7 @@
       });
     }
 
-    return url.pathname + url.search;
+    return toRequestUrl(url, config);
   }
 
   function getWindowLocationOrigin() {
@@ -281,7 +289,7 @@
     url.searchParams.set("pageSize", "1");
     url.searchParams.set("dateFormat", config.dateFormat);
 
-    return url.pathname + url.search;
+    return toRequestUrl(url, config);
   }
 
   function createApiClient(config) {
@@ -585,14 +593,26 @@
     var title = createElement("strong");
     title.textContent = "Kan de ingelogde behandelaar niet ophalen.";
     var details = createElement("p");
-    details.textContent =
-      error.status === 401 || error.status === 403
-        ? "Controleer of deze widget vanaf dezelfde TOPdesk-omgeving draait en of de ingelogde gebruiker API-leesrechten heeft."
-        : error.message;
+    details.textContent = getGlobalErrorMessage(error);
 
     wrapper.appendChild(title);
     wrapper.appendChild(details);
     return wrapper;
+  }
+
+  function getGlobalErrorMessage(error) {
+    if (error.status === 401 || error.status === 403) {
+      return "Controleer of deze widget vanaf dezelfde TOPdesk-omgeving draait en of de ingelogde gebruiker API-leesrechten heeft.";
+    }
+
+    if (error.path && /^\/tas\/api\//.test(error.path)) {
+      return (
+        error.message +
+        " Controleer bij externe hosting of apiBasePath naar je TOPdesk-URL of naar een reverse proxy wijst; anders wordt /tas/api op de widgethost aangeroepen."
+      );
+    }
+
+    return error.message;
   }
 
   function renderSection(sectionResult) {

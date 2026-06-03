@@ -55,6 +55,40 @@ Belangrijke opties:
 | `refreshIntervalMs` | Automatisch verversen in milliseconden. Standaard 5 minuten. |
 | `sections` | Overschrijf per kaarttype endpoint, filtervelden, velden of linktemplates. |
 
+### Externe hosting, zoals tjaws.com
+
+Als je de widget host op bijvoorbeeld `https://tjaws.com/topdesk/`, dan gaat
+`apiBasePath: "/tas/api"` naar:
+
+```text
+https://tjaws.com/tas/api/...
+```
+
+Dat is niet jouw TOPdesk API en geeft vaak fouten zoals HTTP 503. Je kunt de
+widget dan technisch naar TOPdesk laten wijzen met:
+
+```js
+window.TOPDESK_ASSIGNED_WORK_CONFIG = {
+  apiBasePath: "https://jouworganisatie.topdesk.net/tas/api"
+};
+```
+
+Maar in veel TOPdesk-omgevingen blokkeert de browser daarna alsnog de request,
+omdat de widget op `tjaws.com` draait en TOPdesk op een andere origin. Daarvoor
+moet TOPdesk CORS met credentials toestaan of moet `tjaws.com` een server-side
+reverse proxy aanbieden, bijvoorbeeld:
+
+```js
+window.TOPDESK_ASSIGNED_WORK_CONFIG = {
+  apiBasePath: "https://tjaws.com/topdesk-api"
+};
+```
+
+Die proxy stuurt requests dan server-side door naar
+`https://jouworganisatie.topdesk.net/tas/api`. Zet geen TOPdesk
+applicatietoken of wachtwoord in `index.html` of `src/topdesk-widget.js`, want
+frontendcode is zichtbaar voor iedereen die de pagina opent.
+
 De standaardconfiguratie probeert meerdere gangbare TOPdesk-varianten. Voor
 incidenten gebruikt de widget standaard `/tas/api/incidents` met
 `operator.id=<behandelaar-id>` en `completed=false`. Voor wijzigingen en
