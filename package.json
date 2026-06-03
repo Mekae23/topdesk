@@ -1,0 +1,9 @@
+{
+  "name": "topdesk-assigned-work-widget",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Standalone TOPdesk webwidget voor toegewezen incidenten, wijzigingen en operationele taken.",
+  "scripts": {
+    "test": "node tests/topdesk-widget.test.js"
+  }
+}

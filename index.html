@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mijn TOPdesk-werk</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main id="topdesk-assigned-work" aria-live="polite"></main>
+
+    <script src="./src/topdesk-widget.js"></script>
+    <script>
+      window.TOPDESK_ASSIGNED_WORK_CONFIG = {
+        /*
+         * Laat apiBasePath relatief als deze pagina binnen dezelfde TOPdesk-origin
+         * wordt gehost. Als je deze bestanden extern host, bijvoorbeeld op
+         * https://tjaws.com/topdesk/, dan verwijst /tas/api naar die host.
+         * Gebruik dan alleen een absolute TOPdesk-URL als TOPdesk CORS met
+         * credentials toestaat, of laat apiBasePath naar een eigen proxy wijzen:
+         * apiBasePath: "https://mijnorganisatie.topdesk.net/tas/api"
+         */
+        apiBasePath: "/tas/api",
+        pageSize: 10
+      };
+
+      TopdeskAssignedWorkWidget.createWidget(
+        document.getElementById("topdesk-assigned-work"),
+        window.TOPDESK_ASSIGNED_WORK_CONFIG
+      );
+    </script>
+  </body>
+</html>
